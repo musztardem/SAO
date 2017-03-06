@@ -17,8 +17,8 @@
     "nwjs"
   ],
   "window": {
-    "width": 800,
-    "height": 700,
+    "width": 825,
+    "height": 725,
     "toolbar": false,
     "position": "center"
   },
