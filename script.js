@@ -1,70 +1,66 @@
-const canvas = document.getElementById('board');
-const ctx = canvas.getContext('2d');
 const NET_FACTOR = 50;
 
-const cities = [
-  { x: 100, y: 100 },
-  { x: 100, y: 200 },
-  { x: 200, y: 300 },
-  { x: 400, y: 400 },
-  { x: 200, y: 500 },
-  { x: 300, y: 600 },
-  { x: 500, y: 500 },
-  { x: 600, y: 600 },
-  { x: 700, y: 400 },
-  { x: 500, y: 300 },
-  { x: 600, y: 200 },
-  { x: 400, y: 100 },
-];
-
-const drawBackground = () => {
-  /* background color */
-  ctx.fillStyle = Colors.grey;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  /* net */
-  ctx.strokeStyle = Colors.blue;
-  for (let i = 0; i < canvas.width / NET_FACTOR; i++) {
-    ctx.beginPath();
-    ctx.moveTo(i * NET_FACTOR, 0);
-    ctx.lineTo(i * NET_FACTOR, canvas.height);
-    ctx.stroke();
+class Painter {
+  constructor() {
+    this._canvas = document.getElementById('board');
+    this._ctx = this._canvas.getContext('2d');
   }
 
-  for (let i = 0; i < canvas.height / NET_FACTOR; i++) {
-    ctx.beginPath();
-    ctx.moveTo(0, i * NET_FACTOR);
-    ctx.lineTo(canvas.width, i * NET_FACTOR);
-    ctx.stroke();
+  _drawBackground() {
+    /* background color */
+    this._ctx.fillStyle = Colors.grey;
+    this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
+
+    /* net */
+    this._ctx.strokeStyle = Colors.blue;
+    for (let i = 0; i < this._canvas.width / NET_FACTOR; i++) {
+      this._ctx.beginPath();
+      this._ctx.moveTo(i * NET_FACTOR, 0);
+      this._ctx.lineTo(i * NET_FACTOR, this._canvas.height);
+      this._ctx.stroke();
+    }
+
+    for (let i = 0; i < this._canvas.height / NET_FACTOR; i++) {
+      this._ctx.beginPath();
+      this._ctx.moveTo(0, i * NET_FACTOR);
+      this._ctx.lineTo(this._canvas.width, i * NET_FACTOR);
+      this._ctx.stroke();
+    }
+  }
+
+  _drawCities() {
+    this._ctx.strokeStyle = Colors.yellow;
+    this._ctx.fillStyle = Colors.yellow;
+
+    this._cities.forEach(city => {
+      let radius = 10;
+      this._ctx.beginPath();
+      this._ctx.arc(city.x, city.y, radius, 0, 2 * Math.PI, false);
+      this._ctx.fill();
+      this._ctx.stroke();
+    });
+  }
+
+  _drawConnections() {
+    this._ctx.strokeStyle = Colors.orange;
+    for (let i = 0; i < this._cities.length; i++ ) {
+      let currCityIndex = i;
+      let nextCityIndex = (i+1) % this._cities.length;
+
+      this._ctx.beginPath();
+      this._ctx.moveTo(this._cities[currCityIndex].x, this._cities[currCityIndex].y);
+      this._ctx.lineTo(this._cities[nextCityIndex].x, this._cities[nextCityIndex].y);
+      this._ctx.stroke();
+    }
+  }
+
+  paint(cities) {
+    this._cities = cities;
+    this._drawBackground();
+    this._drawConnections();
+    this._drawCities();
   }
 }
 
-const drawCities = () => {
-  ctx.strokeStyle = Colors.yellow;
-  ctx.fillStyle = Colors.yellow;
-
-  cities.forEach(city => {
-    let radius = 10;
-    ctx.beginPath();
-    ctx.arc(city.x, city.y, radius, 0, 2 * Math.PI, false);
-    ctx.fill();
-    ctx.stroke();
-  });
-}
-
-const drawConnections = () => {
-  ctx.strokeStyle = Colors.orange;
-  for (let i = 0; i < cities.length; i++ ) {
-    let currCityIndex = i;
-    let nextCityIndex = (i+1) % cities.length;
-
-    ctx.beginPath();
-    ctx.moveTo(cities[currCityIndex].x, cities[currCityIndex].y);
-    ctx.lineTo(cities[nextCityIndex].x, cities[nextCityIndex].y);
-    ctx.stroke();
-  }
-}
-
-drawBackground();
-drawConnections();
-drawCities();
+const painter = new Painter();
+painter.paint(cities);
