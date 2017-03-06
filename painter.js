@@ -1,4 +1,4 @@
-const NET_FACTOR = 50;
+const NET_DIVISOR = 50;
 
 class Painter {
   constructor() {
@@ -13,17 +13,17 @@ class Painter {
 
     /* net */
     this._ctx.strokeStyle = Colors.blue;
-    for (let i = 0; i < this._canvas.width / NET_FACTOR; i++) {
+    for (let i = 0; i < this._canvas.width / NET_DIVISOR; i++) {
       this._ctx.beginPath();
-      this._ctx.moveTo(i * NET_FACTOR, 0);
-      this._ctx.lineTo(i * NET_FACTOR, this._canvas.height);
+      this._ctx.moveTo(i * NET_DIVISOR, 0);
+      this._ctx.lineTo(i * NET_DIVISOR, this._canvas.height);
       this._ctx.stroke();
     }
 
-    for (let i = 0; i < this._canvas.height / NET_FACTOR; i++) {
+    for (let i = 0; i < this._canvas.height / NET_DIVISOR; i++) {
       this._ctx.beginPath();
-      this._ctx.moveTo(0, i * NET_FACTOR);
-      this._ctx.lineTo(this._canvas.width, i * NET_FACTOR);
+      this._ctx.moveTo(0, i * NET_DIVISOR);
+      this._ctx.lineTo(this._canvas.width, i * NET_DIVISOR);
       this._ctx.stroke();
     }
   }
