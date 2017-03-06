@@ -1,0 +1,27 @@
+{
+  "name": "tsp-ea",
+  "version": "0.0.1",
+  "description": "Application of genetic algorithm to the traveling salesman problem.",
+  "main": "index.html",
+  "scripts": {
+    "start": "../nwjs/nw ."
+  },
+  "keywords": [
+    "tsp",
+    "evolutionary",
+    "genetic",
+    "traveling",
+    "salesman",
+    "node",
+    "javascript",
+    "nwjs"
+  ],
+  "window": {
+    "width": 800,
+    "height": 700,
+    "toolbar": false,
+    "position": "center"
+  },
+  "author": "Antoni Pstras",
+  "license": "MIT"
+}
