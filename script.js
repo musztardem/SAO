@@ -52,5 +52,19 @@ const drawCities = () => {
   });
 }
 
+const drawConnections = () => {
+  ctx.strokeStyle = Colors.orange;
+  for (let i = 0; i < cities.length; i++ ) {
+    let currCityIndex = i;
+    let nextCityIndex = (i+1) % cities.length;
+
+    ctx.beginPath();
+    ctx.moveTo(cities[currCityIndex].x, cities[currCityIndex].y);
+    ctx.lineTo(cities[nextCityIndex].x, cities[nextCityIndex].y);
+    ctx.stroke();
+  }
+}
+
 drawBackground();
+drawConnections();
 drawCities();
