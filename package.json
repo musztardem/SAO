@@ -18,10 +18,11 @@
   ],
   "window": {
     "width": 825,
-    "height": 725,
+    "height": 825,
     "toolbar": false,
     "position": "center"
   },
+  "chromium-args": "--enable-logging=stderr",
   "author": "Antoni Pstras",
   "license": "MIT"
 }

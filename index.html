@@ -10,19 +10,20 @@
   </head>
   <body>
     <div class="container">
-      <canvas id="board" width="800" height="700">
+      <canvas id="board" width="800" height="800">
         Canvas unsupported.
       </canvas>
     </div>
-    <script src="cities_generator.js"></script>
-    <script src="utils.js"></script>
-    <script src="colors.js"></script>
+
+    <script src="scripts/cities_generator.js"></script>
+    <script src="scripts/utils.js"></script>
+    <script src="scripts/colors.js"></script>
 
     <script>
       const citiesGenerator = new CitiesGenerator(15, 800, 700);
       const cities = citiesGenerator.generate();
     </script>
 
-    <script src="painter.js"></script>
+    <script src="scripts/painter.js"></script>
   </body>
 </html>
