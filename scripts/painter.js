@@ -2,8 +2,9 @@ const NET_DIVISOR = 50;
 
 class Painter {
   constructor() {
-    this._canvas = document.getElementById('board');
-    this._ctx = this._canvas.getContext('2d');
+    const canvasWrapper = new CanvasWrapper();
+    this._canvas = canvasWrapper.getCanvas();
+    this._ctx = canvasWrapper.getContext();
   }
 
   _drawBackground() {
@@ -61,6 +62,3 @@ class Painter {
     this._drawCities();
   }
 }
-
-const painter = new Painter();
-painter.paint(cities);
