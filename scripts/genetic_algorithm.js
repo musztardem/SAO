@@ -1,5 +1,5 @@
 const POPULATION_SIZE = 20;
-const CITIES_COUNT = 15;
+const CITIES_COUNT = 16;
 
 const canvasWrapper = new CanvasWrapper();
 const MAX_WIDTH = canvasWrapper.getWidth();
@@ -12,45 +12,116 @@ class GeneticAlgorithm {
 
   _generateInitialPopulation() {
     const citiesGenerator = new CitiesGenerator(CITIES_COUNT, MAX_WIDTH, MAX_HEIGHT);
+    const initialCities = citiesGenerator.generate();
+
     for (let i = 0; i < POPULATION_SIZE; i++) {
       let individual = {
         genome: [],
         fitness: 0
       };
-      individual.genome = citiesGenerator.generate();
+      individual.genome = Utils.shuffle(initialCities);
+      individual = this._evaluate(individual); // ?
       this._population.push(individual);
     }
   }
 
-  _evaluate() {
-    /*
-      Count total distance for each individual in population
-    */
+  _evaluate(individual) {
+    const { genome } = individual;
+    let distance = 0;
+    for(let i = 0; i < genome.length; i++) {
+      let currCityIndex = i;
+      let nextCityIndex = (i+1) % genome.length;
+
+      let a = genome[currCityIndex].x - genome[nextCityIndex].x;
+      let b = genome[currCityIndex].y - genome[nextCityIndex].y;
+      distance += Math.sqrt( a*a + b*b );
+    }
+    individual.fitness = distance;
+
+    return individual;
   }
 
-  _selection() {
-    /*
-      Select part of population based on selection strategy (?).
-    */
+  _select() {
+    return this._population.sort((a, b) => {
+      return b.fitness - a.fitness;
+    }).slice(0, POPULATION_SIZE/2);
   }
 
-  _crossover() {
-    /*
-     Apply crossover strategy based on crossover strategy (?)
-    */
+  _crossover(mother, father) {
+    let sliceIndex = mother.genome.length / 2;
+    let motherHalf = mother.genome.slice(0, sliceIndex);
+    let fatherHalf = father.genome.slice(0, sliceIndex);
+
+    let son = motherHalf.slice();
+    let daughter = fatherHalf.slice();
+
+    for (let i = 0; i < father.genome.length; i++) {
+      if (Utils.findObjectInArray(son, father.genome[i]) === -1) {
+        son.push(father.genome[i]);
+      }
+      if (Utils.findObjectInArray(daughter, mother.genome[i]) === -1) {
+        daughter.push(father.genome[i]);
+      }
+    }
+
+    return [
+      {
+        genome: mother.genome,
+        fitness: 0
+      },
+      {
+        genome: father.genome,
+        fitness: 0
+      }
+    ];
   }
 
-  _mutation() {
-    /*
-      Mutate newborn child based on mutation strategy (?)
-    */
+  _mutate(child) {
+    const maxIndex = child.genome.length - 1;
+    const firstIndex = Utils.getRandomNumber(0, maxIndex);
+    const secondIndex = Utils.getRandomNumber(0, maxIndex);
+
+    Utils.swap(child.genome, firstIndex, secondIndex);
+
+    return child;
+  }
+
+  _createNewGeneration(individuals) {
+    const newGeneration = [];
+    for (let i = 0; i < POPULATION_SIZE/2; i++) {
+      let motherIndex = Utils.getRandomNumber(0, individuals.length - 1);
+      let fatherIndex = Utils.getRandomNumber(0, individuals.length - 1);
+
+      let mother = individuals[motherIndex];
+      let father = individuals[fatherIndex];
+
+      let children = this._crossover(mother, father);
+
+      newGeneration.push(this._mutate(children[0]));
+      newGeneration.push(this._mutate(children[1]));
+    }
+
+    this._population = newGeneration;
   }
 
   start() {
+    const painter = new Painter();
     this._generateInitialPopulation();
+
+    // for (let i = 0; i < 1000; i++) {
+    setInterval(() => {
+      this._population.forEach(individual => {
+        individual = this._evaluate(individual);
+      });
+      let selectedIndividuals = this._select();
+      this._createNewGeneration(selectedIndividuals);
+
+      painter.paint(this._population[0].genome);
+    }, 1000)
+    // }
   }
 
-  getBestIndividualCities() {
+  getBestIndividual() {
     return this._population[0].genome;
   }
 }
