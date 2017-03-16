@@ -43,7 +43,7 @@ class GeneticAlgorithm {
 
   _select() {
     return this._population.sort((a, b) => {
-      return b.fitness - a.fitness;
+      return a.fitness - b.fitness;
     }).slice(0, POPULATION_SIZE/2);
   }
 
@@ -55,22 +55,25 @@ class GeneticAlgorithm {
     let son = motherHalf.slice();
     let daughter = fatherHalf.slice();
 
-    for (let i = 0; i < father.genome.length; i++) {
-      if (Utils.findObjectInArray(son, father.genome[i]) === -1) {
-        son.push(father.genome[i]);
+    for (let city of father.genome) {
+      if (Utils.findObjectInArray(son, city) === -1) {
+        son.push(city);
       }
-      if (Utils.findObjectInArray(daughter, mother.genome[i]) === -1) {
-        daughter.push(father.genome[i]);
+    }
+
+    for (let city of mother.genome) {
+      if (Utils.findObjectInArray(daughter, city) === -1) {
+        daughter.push(city);
       }
     }
 
     return [
       {
-        genome: mother.genome,
+        genome: son,
         fitness: 0
       },
       {
-        genome: father.genome,
+        genome: daughter,
         fitness: 0
       }
     ];
@@ -108,17 +111,18 @@ class GeneticAlgorithm {
     const painter = new Painter();
     this._generateInitialPopulation();
 
-    // for (let i = 0; i < 1000; i++) {
-    setInterval(() => {
+    for (let i = 0; i < 1000; i++) {
       this._population.forEach(individual => {
         individual = this._evaluate(individual);
       });
       let selectedIndividuals = this._select();
+
+      console.log('FITNESS -> ' + this._population[0].fitness);
+
       this._createNewGeneration(selectedIndividuals);
 
       painter.paint(this._population[0].genome);
-    }, 1000)
-    // }
+    }
   }
 
   getBestIndividual() {
