@@ -1,4 +1,6 @@
 const COORD_DIVISOR = 50;
+const TEST_CASES_PATH = './scripts/test_cases.json';
+const fs = require('fs');
 
 class CitiesGenerator {
   constructor(citiesCount, maxWidth, maxHeight) {
@@ -31,4 +33,12 @@ class CitiesGenerator {
 
     return cities;
   }
+
+  getTestCase(testCase) {
+    const jsonText = fs.readFileSync(TEST_CASES_PATH, 'utf8');
+    const json = JSON.parse(jsonText);
+
+    return json[testCase];
+  }
+
 }

@@ -12,7 +12,8 @@ class GeneticAlgorithm {
 
   _generateInitialPopulation() {
     const citiesGenerator = new CitiesGenerator(CITIES_COUNT, MAX_WIDTH, MAX_HEIGHT);
-    const initialCities = citiesGenerator.generate();
+    // const initialCities = citiesGenerator.generate();
+    const initialCities = citiesGenerator.getTestCase('square');
 
     for (let i = 0; i < POPULATION_SIZE; i++) {
       let individual = {
@@ -111,18 +112,19 @@ class GeneticAlgorithm {
     const painter = new Painter();
     this._generateInitialPopulation();
 
-    for (let i = 0; i < 1000; i++) {
+    // for (let i = 0; i < 1000; i++) {
+    setInterval(() => {
       this._population.forEach(individual => {
         individual = this._evaluate(individual);
       });
       let selectedIndividuals = this._select();
-
       console.log('FITNESS -> ' + this._population[0].fitness);
 
       this._createNewGeneration(selectedIndividuals);
 
       painter.paint(this._population[0].genome);
-    }
+    }, 25)
+    // }
   }
 
   getBestIndividual() {

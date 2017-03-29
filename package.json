@@ -23,6 +23,7 @@
     "position": "center"
   },
   "chromium-args": "--enable-logging=stderr",
+  "shareFolder": "/home/antoni/Pulpit/10semestr/SAO/project/scripts",
   "author": "Antoni Pstras",
   "license": "MIT"
 }
