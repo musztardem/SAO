@@ -19,7 +19,7 @@ class ChartDrawer {
   }
 
   _setColumns() {
-    this._data.addColumn('number', 'Population');
+    this._data.addColumn('number', 'Generation');
     this._data.addColumn('number', 'Max fitness');
     this._data.addColumn('number', 'Average fitness');
     this._data.addColumn('number', 'Min fitness');
@@ -28,11 +28,16 @@ class ChartDrawer {
   _setOptions() {
     this._options = {
       chart: {
-        title: 'Fitness chart of ',
-        subtitle: 'in millions of dollars (USD)'
+        title: 'Fitness chart of GA population',
       },
       width: 900,
-      height: 500
+      height: 500,
+      hAxis: {
+        title: 'Generation'
+      },
+      vAxis: {
+        title: 'Fitness'
+      }
     };
   }
 
