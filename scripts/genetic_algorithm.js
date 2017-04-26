@@ -1,5 +1,5 @@
 const POPULATION_SIZE = 20;
-const CITIES_COUNT = 16;
+const CITIES_COUNT = 30
 
 const canvasWrapper = new CanvasWrapper();
 const MAX_WIDTH = canvasWrapper.getWidth();
@@ -8,12 +8,13 @@ const MAX_HEIGHT = canvasWrapper.getHeight();
 class GeneticAlgorithm {
   constructor() {
     this._population = [];
+    this._gatheredData = [];
   }
 
   _generateInitialPopulation() {
     const citiesGenerator = new CitiesGenerator(CITIES_COUNT, MAX_WIDTH, MAX_HEIGHT);
-    // const initialCities = citiesGenerator.generate();
-    const initialCities = citiesGenerator.getTestCase('square');
+    const initialCities = citiesGenerator.generate();
+    // const initialCities = citiesGenerator.getTestCase('octagon'); // square, star, octagon
 
     for (let i = 0; i < POPULATION_SIZE; i++) {
       let individual = {
@@ -108,26 +109,55 @@ class GeneticAlgorithm {
     this._population = newGeneration;
   }
 
+  _gatherData(populationCounter) {
+    let sum = 0;
+    let max = this._population[0].fitness;
+    let min = max;
+
+    for (let ind of this._population) {
+      sum += ind.fitness;
+      if (ind.fitness > max) max = ind.fitness;
+      if (ind.fitness < min) min = ind.fitness;
+    }
+
+    let avg = sum / this._population.length;
+
+    this._gatheredData.push([
+      populationCounter,
+      max,
+      avg,
+      min
+    ]);
+  }
+
   start() {
     const painter = new Painter();
     this._generateInitialPopulation();
 
-    // for (let i = 0; i < 1000; i++) {
-    setInterval(() => {
+    let bestIndividualFitness = 100000;
+    let populationCounter = 1;
+    let s = setInterval(() => {
       this._population.forEach(individual => {
         individual = this._evaluate(individual);
       });
+
+      this._gatherData(populationCounter++);
       let selectedIndividuals = this._select();
-      console.log('FITNESS -> ' + this._population[0].fitness);
+
+      if (this._population[0].fitness < bestIndividualFitness) {
+        painter.paint(this._population[0].genome);
+        bestIndividualFitness = this._population[0].fitness;
+      }
 
       this._createNewGeneration(selectedIndividuals);
-
-      painter.paint(this._population[0].genome);
     }, 25)
-    // }
   }
 
   getBestIndividual() {
     return this._population[0].genome;
+  }
+
+  getGatheredData() {
+    return this._gatheredData;
   }
 }
