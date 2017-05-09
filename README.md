@@ -11,3 +11,9 @@
 * Wykresy funkcji fitness
 * Ruletkowa selekcja
 * Większe przykłady
+
+* Optymalizacja heurystyczna
+* Mutacja - 10%
+* Krzyżowanie - 50%
+* Wygenerować większy przykład
+* Naprawić wykres

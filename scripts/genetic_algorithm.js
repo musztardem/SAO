@@ -1,5 +1,5 @@
 const POPULATION_SIZE = 20;
-const CITIES_COUNT = 30
+const CITIES_COUNT = 100;
 
 const canvasWrapper = new CanvasWrapper();
 const MAX_WIDTH = canvasWrapper.getWidth();

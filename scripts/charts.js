@@ -43,7 +43,6 @@ class ChartDrawer {
 
   setData(data) {
     this._data.addRows(data);
-
   }
 
   drawChart() {
