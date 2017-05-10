@@ -1,10 +1,10 @@
 const POPULATION_SIZE = 20;
 const CITIES_COUNT = 100;
 
-const MUTATION_RATIO = 10;
+const MUTATION_RATIO = 20;
 const CROSSOVER_RATIO = 50;
 const ELITISM = true;
-const ELITISM_RATIO = 20;
+const ELITISM_RATIO = 40;
 
 const canvasWrapper = new CanvasWrapper();
 const MAX_WIDTH = canvasWrapper.getWidth();

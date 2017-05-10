@@ -6,7 +6,7 @@ function drawChart() {
   let s = setInterval(() => {
     cd.setData(ga.getGatheredData());
     cd.drawChart();
-  }, 1000);
+  }, 5000);
 
 }
 
