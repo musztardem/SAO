@@ -4,7 +4,7 @@
   "description": "Application of genetic algorithm to the traveling salesman problem.",
   "main": "index.html",
   "scripts": {
-    "start": "../nwjs/nw ."
+    "start": "~/Applications/nwjs.app/Contents/MacOS/nwjs ."
   },
   "keywords": [
     "tsp",
