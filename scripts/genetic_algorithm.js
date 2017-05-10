@@ -1,6 +1,11 @@
 const POPULATION_SIZE = 20;
 const CITIES_COUNT = 100;
 
+const MUTATION_RATIO = 10;
+const CROSSOVER_RATIO = 50;
+const ELITISM = true;
+const ELITISM_RATIO = 20;
+
 const canvasWrapper = new CanvasWrapper();
 const MAX_WIDTH = canvasWrapper.getWidth();
 const MAX_HEIGHT = canvasWrapper.getHeight();
@@ -44,15 +49,30 @@ class GeneticAlgorithm {
   }
 
   _select() {
-    return this._population.sort((a, b) => {
+    const sortedPopulation = this._population.sort((a, b) => {
       return a.fitness - b.fitness;
-    }).slice(0, POPULATION_SIZE/2);
+    });
+
+    const newPopulationSize = Math.floor(POPULATION_SIZE * ELITISM_RATIO / 100);
+    if (ELITISM) {
+      const topPopulation = sortedPopulation.slice(0, newPopulationSize);
+      const newPopulation = topPopulation.concat(this._population);
+      return newPopulation.slice(0, POPULATION_SIZE);
+    }
+
+    return this._population;
   }
 
   _crossover(mother, father) {
-    let sliceIndex = mother.genome.length / 2;
-    let motherHalf = mother.genome.slice(0, sliceIndex);
-    let fatherHalf = father.genome.slice(0, sliceIndex);
+    if (Utils.getRandomNumber(0, 100) > CROSSOVER_RATIO) {
+      return [ mother, father ];
+    }
+
+    let motherSliceIndex = Utils.getRandomNumber(1, mother.genome.length);
+    let fatherSliceIndex = Utils.getRandomNumber(1, father.genome.length);
+
+    let motherHalf = mother.genome.slice(0, motherSliceIndex);
+    let fatherHalf = father.genome.slice(0, fatherSliceIndex);
 
     let son = motherHalf.slice();
     let daughter = fatherHalf.slice();
@@ -82,6 +102,8 @@ class GeneticAlgorithm {
   }
 
   _mutate(child) {
+    if (Utils.getRandomNumber(0, 100) > MUTATION_RATIO) return child;
+
     const maxIndex = child.genome.length - 1;
     const firstIndex = Utils.getRandomNumber(0, maxIndex);
     const secondIndex = Utils.getRandomNumber(0, maxIndex);
@@ -150,7 +172,7 @@ class GeneticAlgorithm {
       }
 
       this._createNewGeneration(selectedIndividuals);
-    }, 25)
+    }, 50)
   }
 
   getBestIndividual() {
