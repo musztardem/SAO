@@ -1,5 +1,12 @@
 const POPULATION_SIZE = 20;
-const CITIES_COUNT = 100;
+const CITIES_COUNT = 30
+
+const RANDOMLY_CHOOSEN_CROSS_SLICE_INDEX = 1; // 1-true or 0-false
+const CROSS_PROBABILITY_PERCENT = 20;
+const MUTATION_PROBABILITY_PERMIL = 10
+
+const ELITE_GENOMS_ONLY = 0 // Only top 50% of poulation will be selected to next population
+const LEAVE_PERCENT_OF_TOP_GENOMS = 20 // Only LEAVE_PERCENT_OF_TOP_GENOMS percent of best genoms (top 50%) will be selected
 
 const canvasWrapper = new CanvasWrapper();
 const MAX_WIDTH = canvasWrapper.getWidth();
@@ -44,50 +51,78 @@ class GeneticAlgorithm {
   }
 
   _select() {
-    return this._population.sort((a, b) => {
-      return a.fitness - b.fitness;
-    }).slice(0, POPULATION_SIZE/2);
+	  var topPopulation = [];
+	  if (ELITE_GENOMS_ONLY > 0){
+		  topPopulation = this._population.sort((a, b) => {
+										  return a.fitness - b.fitness;
+										}).slice(0, POPULATION_SIZE/2);
+		  return topPopulation;
+	  }
+	  topPopulation = this._population.sort((a, b) => {
+										  return a.fitness - b.fitness;
+										}).slice(0, Math.floor(((POPULATION_SIZE/2)*LEAVE_PERCENT_OF_TOP_GENOMS)/100));
+										
+	  var selectedPopulation = this._population.concat(topPopulation);
+	  return selectedPopulation.slice(0, POPULATION_SIZE/2);
   }
 
   _crossover(mother, father) {
-    let sliceIndex = mother.genome.length / 2;
-    let motherHalf = mother.genome.slice(0, sliceIndex);
-    let fatherHalf = father.genome.slice(0, sliceIndex);
+	 if (Utils.getRandomNumber(0, 100) < CROSS_PROBABILITY) {
+		let sliceIndex = mother.genome.length / 2;
+		if (RANDOMLY_CHOOSEN_SLICE_INDEX > 0){
+			Utils.getRandomNumber(0, mother.genome.length)
+		}
+		let motherHalf = mother.genome.slice(0, sliceIndex);
+		let fatherHalf = father.genome.slice(0, sliceIndex);
 
-    let son = motherHalf.slice();
-    let daughter = fatherHalf.slice();
+		let son = motherHalf.slice();
+		let daughter = fatherHalf.slice();
 
-    for (let city of father.genome) {
-      if (Utils.findObjectInArray(son, city) === -1) {
-        son.push(city);
-      }
-    }
+		for (let city of father.genome) {
+		  if (Utils.findObjectInArray(son, city) === -1) {
+			son.push(city);
+		  }
+		}
 
-    for (let city of mother.genome) {
-      if (Utils.findObjectInArray(daughter, city) === -1) {
-        daughter.push(city);
-      }
-    }
+		for (let city of mother.genome) {
+		  if (Utils.findObjectInArray(daughter, city) === -1) {
+			daughter.push(city);
+		  }
+		}
 
-    return [
-      {
-        genome: son,
-        fitness: 0
-      },
-      {
-        genome: daughter,
-        fitness: 0
-      }
-    ];
+		return [
+		  {
+			genome: son,
+			fitness: 0
+		  },
+		  {
+			genome: daughter,
+			fitness: 0
+		  }
+		];
+	 } 
+	 
+	 return [
+		  {
+			genome: mother,
+			fitness: 0
+		  },
+		  {
+			genome: father,
+			fitness: 0
+		  }
+		];
   }
 
   _mutate(child) {
-    const maxIndex = child.genome.length - 1;
-    const firstIndex = Utils.getRandomNumber(0, maxIndex);
-    const secondIndex = Utils.getRandomNumber(0, maxIndex);
+	  if (Utils.getRandomNumber(0, 1000) < MUTATION_PROBABILITY_PERMIL) {
+		const maxIndex = child.genome.length - 1;
+		const firstIndex = Utils.getRandomNumber(0, maxIndex);
+		const secondIndex = Utils.getRandomNumber(0, maxIndex);
 
-    Utils.swap(child.genome, firstIndex, secondIndex);
-
+		Utils.swap(child.genome, firstIndex, secondIndex);
+	  }
+	  
     return child;
   }
 
