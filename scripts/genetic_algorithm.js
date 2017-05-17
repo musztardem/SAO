@@ -1,7 +1,7 @@
 const POPULATION_SIZE = 20;
 const CITIES_COUNT = 100;
 
-const MUTATION_RATIO = 20;
+const MUTATION_RATIO = 10;
 const CROSSOVER_RATIO = 50;
 const ELITISM = true;
 const ELITISM_RATIO = 40;
@@ -18,8 +18,8 @@ class GeneticAlgorithm {
 
   _generateInitialPopulation() {
     const citiesGenerator = new CitiesGenerator(CITIES_COUNT, MAX_WIDTH, MAX_HEIGHT);
-    const initialCities = citiesGenerator.generate();
-    // const initialCities = citiesGenerator.getTestCase('octagon'); // square, star, octagon
+    // const initialCities = citiesGenerator.generate();
+    const initialCities = citiesGenerator.getTestCase('bigOne'); // square, star, octagon
 
     for (let i = 0; i < POPULATION_SIZE; i++) {
       let individual = {
