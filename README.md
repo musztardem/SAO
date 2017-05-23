@@ -8,7 +8,7 @@
 * ~~Ruletkowa selekcja~~
 * ~~Mutacja - 10%~~
 * ~~Krzyżowanie - 50%~~
-* Wygenerować większy przykład
+* ~~Wygenerować większy przykład~~
 * Naprawić wykres
 * Dwa poziomy mutacji
 * Wyprodukować więcej dokumentacji
