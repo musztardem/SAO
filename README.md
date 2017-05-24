@@ -9,9 +9,9 @@
 * ~~Mutacja - 10%~~
 * ~~Krzyżowanie - 50%~~
 * ~~Wygenerować większy przykład~~
+* ~~Wyprodukować więcej dokumentacji~~
+* ~~Opisać przykład testowy~~
+* ~~Analiza przypadku testowego~~
 * Naprawić wykres
 * Dwa poziomy mutacji
-* Wyprodukować więcej dokumentacji
 * Optymalizacja heurystyczna
-* Opisać przykład testowy
-* Analiza przypadku testowego

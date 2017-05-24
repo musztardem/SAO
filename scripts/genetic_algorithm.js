@@ -1,10 +1,10 @@
 const POPULATION_SIZE = 20;
 const CITIES_COUNT = 100;
 
-const MUTATION_RATIO = 10;
-const CROSSOVER_RATIO = 50;
-const ELITISM = true;
-const ELITISM_RATIO = 40;
+const MUTATION_RATIO = 20;
+const CROSSOVER_RATIO = 60;
+const ELITISM = false;
+const ELITISM_RATIO = 20;
 
 const canvasWrapper = new CanvasWrapper();
 const MAX_WIDTH = canvasWrapper.getWidth();
@@ -60,7 +60,7 @@ class GeneticAlgorithm {
       return newPopulation.slice(0, POPULATION_SIZE);
     }
 
-    return this._population;
+    return sortedPopulation;
   }
 
   _crossover(mother, father) {
@@ -156,7 +156,7 @@ class GeneticAlgorithm {
     const painter = new Painter();
     this._generateInitialPopulation();
 
-    let bestIndividualFitness = 100000;
+    let bestIndividualFitness = Number.POSITIVE_INFINITY;
     let populationCounter = 1;
     let s = setInterval(() => {
       this._population.forEach(individual => {

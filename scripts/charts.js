@@ -1,3 +1,5 @@
+
+const TWO_MINUTES = 2 * 60 * 1000;
 google.charts.load('current', {'packages':['line']});
 google.charts.setOnLoadCallback(drawChart);
 
@@ -6,7 +8,7 @@ function drawChart() {
   let s = setInterval(() => {
     cd.setData(ga.getGatheredData());
     cd.drawChart();
-  }, 5000);
+  }, TWO_MINUTES);
 
 }
 
